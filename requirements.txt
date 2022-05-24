@@ -1,0 +1,11 @@
+django
+gunicorn
+django-heroku
+requests
+dash
+dash_daq
+numpy
+pandas
+sklearn
+scipy
+iteration_utilities

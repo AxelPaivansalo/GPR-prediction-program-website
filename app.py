@@ -248,7 +248,7 @@ def update_graphs(Y_data, length_scale_1, length_scale_2, length_scale_3, length
 
         # Interpolate
         # Color: https://waldyrious.net/viridis-palette-generator/
-        mu_val, std_val = add_methods.gp_pred(gpr, X_pred)
+        mu_val, std_val = gpr.predict(X_pred, return_std=True)
 
         fig.add_trace(go.Scatter(
             x=x_val, y=mu_val - std_val, line_width=0,
@@ -274,8 +274,7 @@ def update_graphs(Y_data, length_scale_1, length_scale_2, length_scale_3, length
 
         # Calculate output value
         X_input = pd.DataFrame({X_data.columns[0]: [input_value_1]})
-        output_value, std_val = add_methods.gp_pred(gpr, X_input)
-        output_value = output_value[0]
+        output_value = gpr.predict(X_input)[0]
     elif len(X_data.columns) == 2:
         # Create grid
         n = 100
@@ -288,9 +287,8 @@ def update_graphs(Y_data, length_scale_1, length_scale_2, length_scale_3, length
         X_pred = np.c_[xx.ravel(), yy.ravel()]
 
         # Interpolate
-        mu_val, std_val = add_methods.gp_pred(gpr, X_pred)
+        mu_val = gpr.predict(X_pred)
         mu_val = np.array(mu_val).reshape((n, n))
-        std_val = np.array(std_val).reshape((n, n))
 
         fig = go.Figure(data=[
             go.Surface(
@@ -313,8 +311,7 @@ def update_graphs(Y_data, length_scale_1, length_scale_2, length_scale_3, length
 
         # Calculate output value
         X_input = pd.DataFrame({ x: y for x, y in zip(X_data.columns, [[input_value_1], [input_value_2]]) })
-        output_value, std_val = add_methods.gp_pred(gpr, X_input)
-        output_value = output_value[0]
+        output_value = gpr.predict(X_input)[0]
     elif len(X_data.columns) == 3:
         # Create grid
         n = 10
@@ -327,7 +324,7 @@ def update_graphs(Y_data, length_scale_1, length_scale_2, length_scale_3, length
         X_pred = np.c_[xx.ravel(), yy.ravel(), zz.ravel()]
 
         # Interpolate
-        mu_val, std_val = add_methods.gp_pred(gpr, X_pred)
+        mu_val = gpr.predict(X_pred)
 
         fig = go.Figure(data=[
             go.Scatter3d(
@@ -352,12 +349,11 @@ def update_graphs(Y_data, length_scale_1, length_scale_2, length_scale_3, length
 
         # Calculate output value
         X_input = pd.DataFrame({ x: y for x, y in zip(X_data.columns, [[input_value_1], [input_value_2], [input_value_3]]) })
-        output_value, std_val = add_methods.gp_pred(gpr, X_input)
-        output_value = output_value[0]
+        output_value = gpr.predict(X_input)[0]
     
     # Model error
-    mu_val_train, std_val_train = add_methods.gp_pred(gpr, X_train)
-    mu_val_val, std_val_val = add_methods.gp_pred(gpr, X_val)
+    mu_val_train = gpr.predict(X_train)
+    mu_val_val, std_val_val = gpr.predict(X_val, return_std=True)
 
     train_error, val_error = add_methods.gp_error(mu_val_train, mu_val_val, std_val_val, X_val, Y_train, Y_val)
 

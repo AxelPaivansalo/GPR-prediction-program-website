@@ -38,7 +38,11 @@ A program for predicting rheological and strength properties of FoamWood utilizi
 
 The packages can be installed with pip for example.
 
-3. A platform for deploying your website. The website runs fine like this locally on your computer, but if you want it on the internet, use a platform such as Heroku for example.
+3. A platform for deploying your website. The website runs fine like this locally on your computer, but if you want it on the internet, you need to use a platform such as Heroku for example. If you are using Heroku, I recommend to install the [Heroku Command Line Interface (CLI)](https://devcenter.heroku.com/articles/heroku-cli). The Heroku CLI can be used to for example look at error logs if your website is not working correctly:
+
+```
+heroku logs --app=gpr-prediction-program --tail
+```
 
 # Example
 
@@ -100,6 +104,10 @@ Relative validation error: 72.015%
 ```
 
 PCA is also performed on the data.
+
+# How to update the website on Heroku
+
+This is really simple. Heroku is connected to this GitHub repository, and automatically updates itself when this repository is updated.
 
 # How to add more data to the model
 
